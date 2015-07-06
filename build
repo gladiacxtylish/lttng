@@ -1,0 +1,7 @@
+#!/bin/bash
+g++ -c -g -I. -std=c++11 hello-tp.c
+#g++ -c -I. -std=c++11 hello.c
+g++ -o hello-tp hello-tp.o -llttng-ust -ldl
+#gcc -c -I. -std=c11 hello-tp.c
+#gcc -o hello hello-tp.o -llttng-ust -ldl
+
