@@ -7,7 +7,7 @@
 #include "hello-tp.h"
 
 
-#include<string>
+#include <string>
 #include <typeinfo>
 #include <vector>
 #include <iostream>
@@ -39,7 +39,7 @@ static void __tracepoint_cb_hello_world___my_first_tracepoint3(
 	} while ((++__tp_probe)->func);
 	end: tracepoint_dlopen.rcu_read_unlock_sym_bp();
 }
-
+//
 
 template <typename A, typename B>
 static inline __attribute__((no_instrument_function)) void __tracepoint_register_hello_world___my_first_tracepoint3(
@@ -56,6 +56,7 @@ static inline void __tracepoint_unregister_hello_world___my_first_tracepoint3(
 		char *name, void (*func)(void), void *data) {
 	__tracepoint_probe_unregister(name, func, data);
 }
+//
 
 /*extern*/int __tracepoint_provider_hello_world2;
 static const char __tp_strtab_hello_world___my_first_tracepoint3[] __attribute__((section("__tracepoints_strings")))
@@ -408,12 +409,97 @@ struct lttng_probe_desc __probe_desc___hello_world3 = {
 
 
 template <typename A, typename B>
-void init (lttng_event_field fields [], std::vector<std::string> names) {
+class LinuxTrace {
+	public:
+	
+	void init () {
+	 	lttng_event_field temp = {
+			.name = "my_string_field", .type = {
+			    .atype = atype_string, .u = {
+			        .basic = {
+			            .string = {
+			                .encoding = lttng_encode_UTF8
+			            }
+			        }
+			    }
+			}, .nowrite = 0
+		};
+			
+		__event_fields___hello_world___my_first_tracepoint3[0] = temp;
+			
+		__event_fields___hello_world___my_first_tracepoint3[1] = {
+			.name = "my_integer_field", .type = {
+			    .atype = atype_integer, .u = {
+			        .basic = {
+			            .integer = {
+			                .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+			            }
+			        }
+			    },
+			}, .nowrite = 0,
+		};
+		
+		/*
+		__tp_strtab_hello_world___my_first_tracepoint3 = "hello_world" ":" "my_first_tracepoint";
+		std::cout << __tracepoint_hello_world___my_first_tracepoint3_.name;
+		__tracepoint_hello_world___my_first_tracepoint3_.name = __tp_strtab_hello_world___my_first_tracepoint3;
+		__tracepoint_hello_world___my_first_tracepoint3_.state = 0;
+		__tracepoint_hello_world___my_first_tracepoint3_.probes = 0;
+		__tracepoint_hello_world___my_first_tracepoint3_.tracepoint_provider_ref = &__tracepoint_provider_hello_world2;
+		__tracepoint_hello_world___my_first_tracepoint3_.signature = "int, my_integer_arg, char*, my_string_arg";
+		//__tracepoint_hello_world___my_first_tracepoint3_.padding = {};
+		__tracepoint_hello_world___my_first_tracepoint3_.name = __tp_strtab_hello_world___my_first_tracepoint3;
+	    __tracepoint_ptr_hello_world___my_first_tracepoint3 = &__tracepoint_hello_world___my_first_tracepoint3_;
+	  	*/
+	}
+	
+	
+	
+    static void __tracepoint_cb_hello_world___my_first_tracepoint3(
+		A my_integer_arg, B my_string_arg) {
+		struct tracepoint_probe *__tp_probe;
+		if (__builtin_expect(!!(!tracepoint_dlopen.rcu_read_lock_sym_bp), 0))
+			return;
+		tracepoint_dlopen.rcu_read_lock_sym_bp();
+		__tp_probe =
+				((__typeof__(__tracepoint_hello_world___my_first_tracepoint3.probes)) (tracepoint_dlopen.rcu_dereference_sym_bp(
+						((void *) (__tracepoint_hello_world___my_first_tracepoint3.probes)))));
+		if (__builtin_expect(!!(!__tp_probe), 0))
+			goto end;
+		do {
+			void (*__tp_cb)(void) = __tp_probe->func;
+			void *__tp_data = __tp_probe->data;
+			((void (*)(void *__tp_data, A my_integer_arg, B my_string_arg)) (__tp_cb))(
+					__tp_data, my_integer_arg, my_string_arg);
+		} while ((++__tp_probe)->func);
+		end: tracepoint_dlopen.rcu_read_unlock_sym_bp();
+	}
+	
+	
+	///*static*/ inline void __tracepoint_register_hello_world___my_first_tracepoint3(
+	//	char *name, void (*func)(void), void *data) {
+	//	__tracepoint_probe_register(name, func, data, this->__tracepoint_hello_world___my_first_tracepoint3_.signature);
+	//}
+	
+	///*static*/ inline void __tracepoint_unregister_hello_world___my_first_tracepoint3(
+	//		char *name, void (*func)(void), void *data) {
+	//	__tracepoint_probe_unregister(name, func, data);
+	//}
+	
+	/*extern*/int __tracepoint_provider_hello_world2;
+/*static*/ const char * __tp_strtab_hello_world___my_first_tracepoint3_; /*__attribute__((section("__tracepoints_strings")))*/
+		//= "hello_world:my_first_tracepoint";
+/*static*/ struct tracepoint __tracepoint_hello_world___my_first_tracepoint3_; /*__attribute__((section("__tracepoints")))*/
+		/*= { __tp_strtab_hello_world___my_first_tracepoint3, 0, 0,
+				&__tracepoint_provider_hello_world2,
+				"int, my_integer_arg, char*, my_string_arg", { }, }; //((void *)0)*/
 
-  
-    
-}
+/*static*/ struct tracepoint * __tracepoint_ptr_hello_world___my_first_tracepoint3_; /*__attribute__((used, section("__tracepoints_ptrs")))*/
+		//= &__tracepoint_hello_world___my_first_tracepoint3_;
 
+/*static*/ struct lttng_event_field __event_fields___hello_world___my_first_tracepoint3_[2];
+	
+};
 
 
 
@@ -422,47 +508,14 @@ void init (lttng_event_field fields [], std::vector<std::string> names) {
 
 
 int main(int argc, char* argv[]) {
-  int x = 1;
-  std::cout << "test " << (typeid(std::string).hash_code() == typeid(std::string).hash_code()) << std::endl;
+    int x = 1;
+    std::cout << "test " << (typeid(std::string).hash_code() == typeid(std::string).hash_code()) << std::endl;
 	char* str = "test";
-    lttng_event_field fields [2];
-std::vector<std::string> names;
-names.push_back("my_string_field");
-names.push_back("my_integer_field");
-printf("test");
+	printf("test");
 
-
-
-    
-      lttng_event_field temp = {
-        .name = names[0].c_str(), .type = {
-            .atype = atype_string, .u = {
-                .basic = {
-                    .string = {
-                        .encoding = lttng_encode_UTF8
-                    }
-                }
-            }
-        }, .nowrite = 0
-      };
-      
-      __event_fields___hello_world___my_first_tracepoint3[0] = temp;
-    
-      __event_fields___hello_world___my_first_tracepoint3[1] = {
-        .name = names[1].c_str(), .type = {
-            .atype = atype_integer, .u = {
-                .basic = {
-                    .integer = {
-                        .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
-                    }
-                }
-            },
-        }, .nowrite = 0,
-      };
-
-
-
-//init<int, char*> (fields, names);
+    LinuxTrace<int, char *> lt;;
+	lt.init();
+	
 	int ret;
 
 	__tracepoint_provider_check_hello_world();
@@ -475,7 +528,9 @@ printf("test");
 
 //do { do { __asm__ __volatile__ ("990: nop" "\n" ".pushsection .note.stapsdt" "," "\"?\"" "," "\"note\"" "\n" ".balign 4" "\n" ".4byte 992f-991f" "," "994f-993f" "," "3" "\n" "991: .asciz \"stapsdt\"" "\n" "992: .balign 4" "\n" "993: .8byte 990b" "\n" ".8byte _.stapsdt.base" "\n" ".8byte 0" "\n" ".asciz \"hello_world\"" "\n" ".asciz \"my_first_tracepoint\"" "\n" ".asciz \"%n[_SDT_S1]@%[_SDT_A1] %n[_SDT_S2]@%[_SDT_A2]\"" "\n" "994: .balign 4" "\n" ".popsection" "\n" :: [_SDT_S1] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type (1) == 14 || __builtin_classify_type (1) == 5) ? sizeof (void *) : sizeof (1))), [_SDT_A1] "nor" ((1)), [_SDT_S2] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type ("test") == 14 || __builtin_classify_type ("test") == 5) ? sizeof (void *) : sizeof ("test"))), [_SDT_A2] "nor" (("test"))); __asm__ __volatile__ (".ifndef _.stapsdt.base" "\n" ".pushsection .stapsdt.base" "," "\"aG\"" "," "\"progbits\"" "," ".stapsdt.base" "," "comdat" "\n" ".weak _.stapsdt.base" "\n" ".hidden _.stapsdt.base" "\n" "_.stapsdt.base: .space 1" "\n" ".size _.stapsdt.base" "," "1" "\n" ".popsection" "\n" ".endif" "\n"); } while (0); if (__builtin_expect(!!(__tracepoint_hello_world___my_first_tracepoint2.state), 0)) __tracepoint_cb_hello_world___my_first_tracepoint2(1, "test"); } while (0);
 	//tracepoint(hello_world, my_first_tracepoint3, 1, "test");
-	__tracepoint_cb_hello_world___my_first_tracepoint3<int, char*>(1, str);
+	//__tracepoint_cb_hello_world___my_first_tracepoint3<int, char*>(1, str);
+		
+	lt.__tracepoint_cb_hello_world___my_first_tracepoint3(1, "test123");
 
 }
 
