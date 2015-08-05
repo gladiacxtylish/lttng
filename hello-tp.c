@@ -1024,8 +1024,8 @@ class LinuxTrace {
             .name = "hello_world" ":" "my_first_tracepoint",
             .probe_callback = (void (*)(void)) &__event_probe__hello_world___my_first_tracepoint,
             .ctx = __null,
-            .fields = __event_fields___hello_world___my_first_tracepoint,
-            .nr_fields = (sizeof(__event_fields___hello_world___my_first_tracepoint) / sizeof((__event_fields___hello_world___my_first_tracepoint4_)[0])),
+            .fields = __event_fields___hello_world___my_first_tracepoint4_,
+            .nr_fields = (sizeof(__event_fields___hello_world___my_first_tracepoint4_) / sizeof((__event_fields___hello_world___my_first_tracepoint4_)[0])),
             .loglevel = &__ref_loglevel___hello_world___my_first_tracepoint,
             .signature = __tp_event_signature___hello_world___my_first_tracepoint4_,
             .u =
@@ -1041,8 +1041,8 @@ class LinuxTrace {
         
         __probe_desc___hello_world4_ = {
          .provider = "hello_world",
-         .event_desc = __event_desc___hello_world3,
-         .nr_events = (sizeof(__event_desc___hello_world3) / sizeof((__event_desc___hello_world3)[0])),
+         .event_desc = (const lttng_event_desc**)__event_desc___hello_world4_,
+         .nr_events = (sizeof(__event_desc___hello_world4_) / sizeof((__event_desc___hello_world4_)[0])),
          .head = { __null, __null },
          .lazy_init_head = { __null, __null },
          .lazy = 0,
@@ -1097,7 +1097,7 @@ int main(int argc, char* argv[]) {
 	int ret;
 
 	__tracepoint_provider_check_hello_world();
-	ret = lttng_probe_register(&__probe_desc___hello_world3);
+	ret = lttng_probe_register(&lt.__probe_desc___hello_world4_);
 	if (ret) {
 	  printf("bad %d\n", ret);
 	}
