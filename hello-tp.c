@@ -929,6 +929,7 @@ class LinuxTrace {
     struct lttng_ust_tracepoint __tracepoint_hello_world___my_first_tracepoint4_;
     
     struct lttng_ust_tracepoint * __tracepoint_ptr_hello_world___my_first_tracepoint4_;
+    struct lttng_ust_tracepoint * __start___tracepoints_ptrs4_[1];
 
     
     LinuxTrace () {
@@ -973,8 +974,10 @@ class LinuxTrace {
     					"tracepoint_unregister_lib"));
     	__tracepoint__init_urcu_sym();
         
-        struct lttng_ust_tracepoint * const __start___tracepoints_ptrs4_[] = {__tracepoint_ptr_hello_world___my_first_tracepoint4_};
-        
+        struct lttng_ust_tracepoint * const __start___tracepoints_ptrs5_[] = {__tracepoint_ptr_hello_world___my_first_tracepoint4_};
+        std::cout << "test0" << __start___tracepoints_ptrs5_[0] << std::endl;
+        __start___tracepoints_ptrs4_[0] = __tracepoint_ptr_hello_world___my_first_tracepoint4_;
+        std::cout << "test0" << __start___tracepoints_ptrs4_[0] << std::endl;
     	if (tracepoint_dlopen.tracepoint_register_lib) {
     		tracepoint_dlopen.tracepoint_register_lib(__start___tracepoints_ptrs4_,
     				1);
