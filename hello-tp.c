@@ -595,7 +595,7 @@ static struct lttng_ust_tracepoint * __tracepoint_ptr_hello_world___my_first_tra
 */
 //////////////////////
 
-static const char __tp_name_len_checkhello_world___my_first_tracepoint[256] __attribute__((unused)) = "hello_world" ":" "my_first_tracepoint";
+//static const char __tp_name_len_checkhello_world___my_first_tracepoint[256] __attribute__((unused)) = "hello_world" ":" "my_first_tracepoint";
 
 
 ///////////////////////////
@@ -642,7 +642,7 @@ static const struct lttng_event_field __event_fields___hello_world___my_first_tr
 
 /////////////////////////
 
-static void __event_probe__hello_world___my_first_tracepoint(void *__tp_data,int my_integer_arg,char* my_string_arg);
+//static void __event_probe__hello_world___my_first_tracepoint(void *__tp_data,int my_integer_arg,char* my_string_arg);
 ///////////////////////////
 
 /*
