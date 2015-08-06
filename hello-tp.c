@@ -1250,10 +1250,23 @@ class LinuxTrace {
         size_t __event_len = 0;
         unsigned int __dynamic_len_idx = 0;
         if (0) (void) __dynamic_len_idx;
+        
+        get_size(my_integer_arg, __dynamic_len, __event_len, __dynamic_len_idx);
+        get_size(my_string_arg, __dynamic_len, __event_len, __dynamic_len_idx);
+        //__event_len += lib_ring_buffer_align(__event_len, 1);
+        //__event_len += sizeof(int);
+        //__event_len += __dynamic_len[__dynamic_len_idx++] = strlen(my_string_arg) + 1;
+        return __event_len;
+    }
+    
+    
+    static size_t get_size (int arg, size_t *__dynamic_len, size_t & __event_len, unsigned int & __dynamic_len_idx) {
         __event_len += lib_ring_buffer_align(__event_len, 1);
         __event_len += sizeof(int);
-        __event_len += __dynamic_len[__dynamic_len_idx++] = strlen(my_string_arg) + 1;
-        return __event_len;
+    }
+    
+    static size_t get_size (char* arg, size_t *__dynamic_len, size_t & __event_len, unsigned int & __dynamic_len_idx) {
+        __event_len += __dynamic_len[__dynamic_len_idx++] = strlen(arg) + 1;
     }
     
     
@@ -1345,6 +1358,9 @@ class LinuxTrace {
         std::cout << "test24 " << std::endl;
     }
 };
+
+
+
 
 
 /////////////////2222222222222222
