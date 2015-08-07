@@ -1068,14 +1068,11 @@ class LinuxTrace {
          .minor = 0,
         };
         
-        
         std::cout << "test2" << std::endl;
-        
     }
     
     
     void dtor () {
-        
         int ret;
 
         if (--__tracepoint_ptrs_registered)
@@ -1090,12 +1087,18 @@ class LinuxTrace {
             }
             memset(&tracepoint_dlopen, 0, sizeof(tracepoint_dlopen));
         }
-
     }
     
     
-    static inline void __event_prepare_filter_stack__hello_world___my_first_tracepoint4_(char *__stack_data, void *__tp_data,int my_integer_arg,char* my_string_arg)
+    static inline void __event_prepare_filter_stack__hello_world___my_first_tracepoint4_(char *__stack_data, void *__tp_data,A my_integer_arg,B my_string_arg)
     {
+        
+        prepare_filter(my_integer_arg, __stack_data, __tp_data);
+        prepare_filter(my_string_arg, __stack_data, __tp_data);
+    }
+    
+    
+    static void prepare_filter(int my_integer_arg, char *__stack_data, void *__tp_data) {
         if (((int) -1 < (int) 0))
         {
             int64_t __ctf_tmp_int64;
@@ -1237,15 +1240,17 @@ class LinuxTrace {
             memcpy(__stack_data, &__ctf_tmp_uint64, sizeof(uint64_t));
         }
         __stack_data += sizeof(int64_t);
-        {
-            const void *__ctf_tmp_ptr = (my_string_arg);
-            memcpy(__stack_data, &__ctf_tmp_ptr, sizeof(void *));
-            __stack_data += sizeof(void *);
-        }
+    }
+    
+    
+    static void prepare_filter(char * my_string_arg, char *__stack_data, void *__tp_data) {
+        const void *__ctf_tmp_ptr = (my_string_arg);
+        memcpy(__stack_data, &__ctf_tmp_ptr, sizeof(void *));
+        __stack_data += sizeof(void *);
     }
 
 
-    static inline size_t __event_get_size__hello_world___my_first_tracepoint4_(size_t *__dynamic_len, void *__tp_data,int my_integer_arg,char* my_string_arg)
+    static inline size_t __event_get_size__hello_world___my_first_tracepoint4_(size_t *__dynamic_len, void *__tp_data,A my_integer_arg,B my_string_arg)
     {
         size_t __event_len = 0;
         unsigned int __dynamic_len_idx = 0;
@@ -1270,7 +1275,7 @@ class LinuxTrace {
     }
     
     
-    static size_t __event_get_align__hello_world___my_first_tracepoint4_(int my_integer_arg,char* my_string_arg)
+    static size_t __event_get_align__hello_world___my_first_tracepoint4_(A my_integer_arg,B my_string_arg)
     {
         size_t __event_align = 1;
         __event_align = (
@@ -1284,18 +1289,19 @@ class LinuxTrace {
     }
     
     
-    static void __event_probe__hello_world___my_first_tracepoint4_(void *__tp_data,int my_integer_arg,char* my_string_arg) {
+    
+    static void __event_probe__hello_world___my_first_tracepoint4_(void *__tp_data,A my_integer_arg,B my_string_arg) {
         struct lttng_event *__event = (struct lttng_event *) __tp_data;
         struct lttng_channel *__chan = __event->chan;
         struct lttng_ust_lib_ring_buffer_ctx __ctx;
         size_t __event_len, __event_align;
         size_t __dynamic_len_idx = 0;
-        union
-        {
+        //union StackVar
+        //{
             size_t __dynamic_len[(sizeof(__event_fields___hello_world___my_first_tracepoint4_) / sizeof((__event_fields___hello_world___my_first_tracepoint4_)[0]))];
             char __filter_stack_data[2 * sizeof(unsigned long) * (sizeof(__event_fields___hello_world___my_first_tracepoint4_) / sizeof((__event_fields___hello_world___my_first_tracepoint4_)[0]))];
-        }
-        __stackvar;
+        //}
+        //__stackvar;
         int __ret;
         if (0) (void) __dynamic_len_idx;
         if (!1) return;
@@ -1307,34 +1313,51 @@ class LinuxTrace {
         {
             struct lttng_bytecode_runtime *bc_runtime;
             int __filter_record = __event->has_enablers_without_bytecode;
-            __event_prepare_filter_stack__hello_world___my_first_tracepoint4_(__stackvar.__filter_stack_data, __tp_data,my_integer_arg,my_string_arg);
+            __event_prepare_filter_stack__hello_world___my_first_tracepoint4_(/*__stackvar.*/__filter_stack_data, __tp_data,my_integer_arg,my_string_arg);
             for (bc_runtime = ((__typeof__(*bc_runtime) *) ((char *) ((reinterpret_cast<__typeof__((&__event->bytecode_runtime_head)->next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void *>((&__event->bytecode_runtime_head)->next)))))) - (unsigned long) (&((__typeof__(*bc_runtime) *) 0)->node)));
             &bc_runtime->node != (&__event->bytecode_runtime_head);
             bc_runtime = ((__typeof__(*bc_runtime) *) ((char *) ((reinterpret_cast<__typeof__(bc_runtime->node.next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void *>(bc_runtime->node.next)))))) - (unsigned long) (&((__typeof__(*bc_runtime) *) 0)->node))))
             {
-                if (__builtin_expect(!!(bc_runtime->filter(bc_runtime, __stackvar.__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0)) __filter_record = 1;
+                if (__builtin_expect(!!(bc_runtime->filter(bc_runtime, /*__stackvar.*/__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0)) __filter_record = 1;
             }
             if (__builtin_expect(!!(!__filter_record), 1)) return;
         }
-        __event_len = __event_get_size__hello_world___my_first_tracepoint4_(__stackvar.__dynamic_len, __tp_data,my_integer_arg,my_string_arg);
+        __event_len = __event_get_size__hello_world___my_first_tracepoint4_(/*__stackvar.*/__dynamic_len, __tp_data,my_integer_arg,my_string_arg);
         __event_align = __event_get_align__hello_world___my_first_tracepoint4_(my_integer_arg,my_string_arg);
         lib_ring_buffer_ctx_init(&__ctx, __chan->chan, __event, __event_len, __event_align, -1, __chan->handle);
         __ctx.ip = __builtin_return_address(0);
         __ret = __chan->ops->event_reserve(&__ctx, __event->id);
         if (__ret < 0) return;
-        {
-            int __tmp = (my_integer_arg);
-            lib_ring_buffer_align_ctx(&__ctx, 1);
-            __chan->ops->event_write(&__ctx, &__tmp, sizeof(__tmp));
-        }
-        lib_ring_buffer_align_ctx(&__ctx, 1);
-        if (__chan->ops->u.has_strcpy) __chan->ops->event_strcpy(&__ctx, my_string_arg, __stackvar.__dynamic_len[__dynamic_len_idx++]);
-        else __chan->ops->event_write(&__ctx, my_string_arg, __stackvar.__dynamic_len[__dynamic_len_idx++]);
+        // {
+        //     int __tmp = (my_integer_arg);
+        //     lib_ring_buffer_align_ctx(&__ctx, 1);
+        //     __chan->ops->event_write(&__ctx, &__tmp, sizeof(__tmp));
+        // }
+        __event_probe(my_integer_arg, __tp_data, __chan, __ctx, __dynamic_len_idx, __dynamic_len, __filter_stack_data);
+        __event_probe(my_string_arg, __tp_data, __chan, __ctx, __dynamic_len_idx, __dynamic_len, __filter_stack_data);
+        
+        // lib_ring_buffer_align_ctx(&__ctx, 1);
+        // if (__chan->ops->u.has_strcpy) __chan->ops->event_strcpy(&__ctx, my_string_arg, __stackvar.__dynamic_len[__dynamic_len_idx++]);
+        // else __chan->ops->event_write(&__ctx, my_string_arg, __stackvar.__dynamic_len[__dynamic_len_idx++]);
         __chan->ops->event_commit(&__ctx);
     }
     
     
-    void __tracepoint_cb_hello_world___my_first_tracepoint4_(int my_integer_arg,char* my_string_arg)
+    static void __event_probe(int & my_integer_arg, void *__tp_data, struct lttng_channel *__chan, struct lttng_ust_lib_ring_buffer_ctx & __ctx, size_t & __dynamic_len_idx, size_t __dynamic_len[], char __filter_stack_data[]) {
+        int __tmp = (my_integer_arg);
+        lib_ring_buffer_align_ctx(&__ctx, 1);
+        __chan->ops->event_write(&__ctx, &__tmp, sizeof(__tmp));
+    }
+    
+    
+    static void __event_probe(char * my_string_arg, void *__tp_data, struct lttng_channel *__chan, struct lttng_ust_lib_ring_buffer_ctx & __ctx, size_t & __dynamic_len_idx, size_t __dynamic_len[], char __filter_stack_data[]) {
+        lib_ring_buffer_align_ctx(&__ctx, 1);
+        if (__chan->ops->u.has_strcpy) __chan->ops->event_strcpy(&__ctx, my_string_arg, __dynamic_len[__dynamic_len_idx++]);
+        else __chan->ops->event_write(&__ctx, my_string_arg, __dynamic_len[__dynamic_len_idx++]);
+    }
+    
+    
+    void __tracepoint_cb_hello_world___my_first_tracepoint4_(A my_integer_arg,B my_string_arg)
     {
         struct lttng_ust_tracepoint_probe *__tp_probe;
         if (__builtin_expect(!!(!tracepoint_dlopen.rcu_read_lock_sym_bp), 0)) return;
