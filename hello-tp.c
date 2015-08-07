@@ -1001,40 +1001,81 @@ class LinuxTrace {
         
         std::cout << "test1" << std::endl;
         
-        lttng_event_field first = {
-            .name = "my_integer_field", .type =
-            {
-                .atype = atype_integer, .u =
+        if(typeid(A) == typeid(int)) {
+            lttng_event_field first = {
+                .name = "my_integer_field", .type =
                 {
-                    .basic =
+                    .atype = atype_integer, .u =
                     {
-                        .integer =
+                        .basic =
                         {
-                            .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+                            .integer =
+                            {
+                                .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+                            }
                         }
-                    }
-                },
-            }, .nowrite = 0,
-        };
-        __event_fields___hello_world___my_first_tracepoint4_[0] = first;
+                    },
+                }, .nowrite = 0,
+            };
+            __event_fields___hello_world___my_first_tracepoint4_[0] = first;
+        }
+        else if (typeid(A) == typeid(char *)) {
+            lttng_event_field second = {
+                .name = "my_string_field", .type =
+                {
+                    .atype = atype_string, .u =
+                    {
+                        .basic =
+                        {
+                            .string =
+                            {
+                                .encoding = lttng_encode_UTF8
+                            }
+                        }
+                    },
+                }, .nowrite = 0,
+            };
+            __event_fields___hello_world___my_first_tracepoint4_[1] = second;
+        }
+        
+        if(typeid(B) == typeid(int)) {
+            lttng_event_field first = {
+                .name = "my_integer_field", .type =
+                {
+                    .atype = atype_integer, .u =
+                    {
+                        .basic =
+                        {
+                            .integer =
+                            {
+                                .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+                            }
+                        }
+                    },
+                }, .nowrite = 0,
+            };
+            __event_fields___hello_world___my_first_tracepoint4_[0] = first;
+        }
+        else if (typeid(B) == typeid(char *)) {
+            lttng_event_field second = {
+                .name = "my_string_field", .type =
+                {
+                    .atype = atype_string, .u =
+                    {
+                        .basic =
+                        {
+                            .string =
+                            {
+                                .encoding = lttng_encode_UTF8
+                            }
+                        }
+                    },
+                }, .nowrite = 0,
+            };
+            __event_fields___hello_world___my_first_tracepoint4_[1] = second;
+        }
         
         
-        lttng_event_field second = {
-            .name = "my_string_field", .type =
-            {
-                .atype = atype_string, .u =
-                {
-                    .basic =
-                    {
-                        .string =
-                        {
-                            .encoding = lttng_encode_UTF8
-                        }
-                    }
-                },
-            }, .nowrite = 0,
-        };
-        __event_fields___hello_world___my_first_tracepoint4_[1] = second;
         
         __tp_event_signature___hello_world___my_first_tracepoint4_ = "int, my_integer_arg, char*, my_string_arg";
         
@@ -1070,6 +1111,32 @@ class LinuxTrace {
         
         std::cout << "test2" << std::endl;
     }
+    
+    
+    // template <typename T>
+    // void init_event_field (int my_integer_arg) {
+    //     lttng_event_field first = {
+    //         .name = "my_integer_field", .type =
+    //         {
+    //             .atype = atype_integer, .u =
+    //             {
+    //                 .basic =
+    //                 {
+    //                     .integer =
+    //                     {
+    //                         .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+    //                     }
+    //                 }
+    //             },
+    //         }, .nowrite = 0,
+    //     };
+        
+    //     __event_fields___hello_world___my_first_tracepoint4_[0] = first;
+    // }
+    
+    // void init_event_field (char * my_string_arg) {
+        
+    // }
     
     
     void dtor () {
