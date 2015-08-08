@@ -947,27 +947,31 @@ class LinuxTrace {
     
     struct lttng_ust_tracepoint * __tracepoint_ptr_hello_world___my_first_tracepoint4_;
     struct lttng_ust_tracepoint * __start___tracepoints_ptrs4_[1];
-
     
-    LinuxTrace () {
-        
+    std::string ns;
+    std::string name;
+    std::string fullname;
+    
+    LinuxTrace (std::string & ns, std::string & name) {
+        fullname = (ns + ":" + name);
+        __tp_strtab_hello_world___my_first_tracepoint4_ = (char *)fullname.c_str();
+        std::cout << __tp_strtab_hello_world___my_first_tracepoint4_ << std::endl;
+        this->ns = ns;
+        this->name = name;
     }
     
-    void construct () {
-        
-    }
     
     void init() {
         
-        __tp_strtab_hello_world___my_first_tracepoint4_ = "hello_world" ":" "my_first_tracepoint";
-        
+        //__tp_strtab_hello_world___my_first_tracepoint4_ = "hello_world:my_first_tracepoint";//"hello_world" ":" "my_first_tracepoint";
+        std::cout << __tp_strtab_hello_world___my_first_tracepoint4_ << std::endl;
         
         __tracepoint_hello_world___my_first_tracepoint4_ = {
             __tp_strtab_hello_world___my_first_tracepoint4_,
             0,
             __null,
             &__tracepoint_provider_hello_world,
-            "int, my_integer_arg, char*, my_string_arg",
+            "char*, my_integer_arg, int, my_string_arg",//"int, my_integer_arg, char*, my_string_arg",
             {},
         };
         
@@ -1020,8 +1024,8 @@ class LinuxTrace {
             __event_fields___hello_world___my_first_tracepoint4_[0] = first;
         }
         else if (typeid(A) == typeid(char *)) {
-            lttng_event_field second = {
-                .name = "my_string_field", .type =
+            lttng_event_field first = {
+                .name = "my_integer_field"/*"my_string_field"*/, .type =
                 {
                     .atype = atype_string, .u =
                     {
@@ -1035,12 +1039,12 @@ class LinuxTrace {
                     },
                 }, .nowrite = 0,
             };
-            __event_fields___hello_world___my_first_tracepoint4_[1] = second;
+            __event_fields___hello_world___my_first_tracepoint4_[0] = first;
         }
         
         if(typeid(B) == typeid(int)) {
-            lttng_event_field first = {
-                .name = "my_integer_field", .type =
+            lttng_event_field second = {
+                .name = "my_string_field"/*"my_integer_field"*/, .type =
                 {
                     .atype = atype_integer, .u =
                     {
@@ -1054,11 +1058,11 @@ class LinuxTrace {
                     },
                 }, .nowrite = 0,
             };
-            __event_fields___hello_world___my_first_tracepoint4_[0] = first;
+            __event_fields___hello_world___my_first_tracepoint4_[1] = second;
         }
         else if (typeid(B) == typeid(char *)) {
             lttng_event_field second = {
-                .name = "my_string_field", .type =
+                .name = "my_integer_field"/*"my_string_field"*/, .type =
                 {
                     .atype = atype_string, .u =
                     {
@@ -1077,10 +1081,10 @@ class LinuxTrace {
         
         
         
-        __tp_event_signature___hello_world___my_first_tracepoint4_ = "int, my_integer_arg, char*, my_string_arg";
+        __tp_event_signature___hello_world___my_first_tracepoint4_ = "char*, my_integer_arg, int, my_string_arg";//"int, my_integer_arg, char*, my_string_arg";
         
         __event_desc___hello_world_my_first_tracepoint4_ = {
-            .name = "hello_world" ":" "my_first_tracepoint",
+            .name = (char *)fullname.c_str(),
             .probe_callback = (void (*)(void)) &__event_probe__hello_world___my_first_tracepoint4_,
             .ctx = __null,
             .fields = __event_fields___hello_world___my_first_tracepoint4_,
@@ -1328,6 +1332,7 @@ class LinuxTrace {
         //__event_len += lib_ring_buffer_align(__event_len, 1);
         //__event_len += sizeof(int);
         //__event_len += __dynamic_len[__dynamic_len_idx++] = strlen(my_string_arg) + 1;
+        std::cout << "size: " << __event_len << std::endl;
         return __event_len;
     }
     
@@ -1440,7 +1445,7 @@ class LinuxTrace {
             void (*__tp_cb)(void) = __tp_probe->func;
             void *__tp_data = __tp_probe->data;
             std::cout << "test22 " << __tp_cb << std::endl;
-            (reinterpret_cast<void (*)(void *__tp_data,int my_integer_arg,char* my_string_arg)>(__tp_cb)) (__tp_data,my_integer_arg,my_string_arg);
+            (reinterpret_cast<void (*)(void *__tp_data,A my_integer_arg,B my_string_arg)>(__tp_cb)) (__tp_data,my_integer_arg,my_string_arg);
         }
         while ((++__tp_probe)->func);
         std::cout << "test23 " << std::endl;
@@ -1459,17 +1464,19 @@ class LinuxTrace {
 int main(int argc, char* argv[]) {
     int x = 1;
     //std::cout << "test " << (typeid(std::string).hash_code() == typeid(std::string).hash_code()) << std::endl;
-	char* str = "test";
+
 	printf("main");
 	std::cout << "---";
 	//tracef("test 123 %d", 1234);
-    LinuxTrace<int, char *> lt;
+    std::string ns = "hello_world";
+    std::string name = "my_first_tracepoint";
+    LinuxTrace<char *, int> lt(ns, name);
+    //LinuxTrace<int, char *> lt(ns, name);
 	lt.init();
 	
 	int ret;
-
-	__tracepoint_provider_check_hello_world();
     
+	__tracepoint_provider_check_hello_world();
     //lt.__probe_desc___hello_world4_.provider = "";
 	ret = lttng_probe_register(&lt.__probe_desc___hello_world4_);
 	if (ret) {
@@ -1481,8 +1488,8 @@ int main(int argc, char* argv[]) {
 //do { do { __asm__ __volatile__ ("990: nop" "\n" ".pushsection .note.stapsdt" "," "\"?\"" "," "\"note\"" "\n" ".balign 4" "\n" ".4byte 992f-991f" "," "994f-993f" "," "3" "\n" "991: .asciz \"stapsdt\"" "\n" "992: .balign 4" "\n" "993: .8byte 990b" "\n" ".8byte _.stapsdt.base" "\n" ".8byte 0" "\n" ".asciz \"hello_world\"" "\n" ".asciz \"my_first_tracepoint\"" "\n" ".asciz \"%n[_SDT_S1]@%[_SDT_A1] %n[_SDT_S2]@%[_SDT_A2]\"" "\n" "994: .balign 4" "\n" ".popsection" "\n" :: [_SDT_S1] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type (1) == 14 || __builtin_classify_type (1) == 5) ? sizeof (void *) : sizeof (1))), [_SDT_A1] "nor" ((1)), [_SDT_S2] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type ("test") == 14 || __builtin_classify_type ("test") == 5) ? sizeof (void *) : sizeof ("test"))), [_SDT_A2] "nor" (("test"))); __asm__ __volatile__ (".ifndef _.stapsdt.base" "\n" ".pushsection .stapsdt.base" "," "\"aG\"" "," "\"progbits\"" "," ".stapsdt.base" "," "comdat" "\n" ".weak _.stapsdt.base" "\n" ".hidden _.stapsdt.base" "\n" "_.stapsdt.base: .space 1" "\n" ".size _.stapsdt.base" "," "1" "\n" ".popsection" "\n" ".endif" "\n"); } while (0); if (__builtin_expect(!!(__tracepoint_hello_world___my_first_tracepoint2.state), 0)) __tracepoint_cb_hello_world___my_first_tracepoint2(1, "test"); } while (0);
 	//tracepoint(hello_world, my_first_tracepoint3, 1, "test");
 	//__tracepoint_cb_hello_world___my_first_tracepoint3<int, char*>(1, str);
-		
-	lt.__tracepoint_cb_hello_world___my_first_tracepoint4_(1, "test123");
+    //lt.__tracepoint_cb_hello_world___my_first_tracepoint4_(123, "test123");
+	lt.__tracepoint_cb_hello_world___my_first_tracepoint4_("test123", 123);
     std::cout << "test40 " << std::endl;
     
     lt.dtor();
