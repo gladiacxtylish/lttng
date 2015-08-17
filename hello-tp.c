@@ -12,13 +12,15 @@
 #include <vector>
 #include <iostream>
 #include <map>
-
+#include <sstream>
 
 
 
 
 static const int * __ref_loglevel___hello_world___my_first_tracepoint __attribute__((weakref ("_loglevel___" "hello_world" "___" "my_first_tracepoint")));
+static const int * __ref_loglevel___hello_world___my_first_tracepoint2 __attribute__((weakref ("_loglevel___" "hello_world2" "___" "my_first_tracepoint")));
 static const char * __ref_model_emf_uri___hello_world___my_first_tracepoint __attribute__((weakref ("_model_emf_uri___" "hello_world" "___" "my_first_tracepoint")));
+static const char * __ref_model_emf_uri___hello_world___my_first_tracepoint2 __attribute__((weakref ("_model_emf_uri___" "hello_world2" "___" "my_first_tracepoint")));
 
 
 template <typename A, typename B>
@@ -26,43 +28,72 @@ class LinuxTrace {
     public:
     
     struct lttng_event_field __event_fields___hello_world___my_first_tracepoint4_[2];
+    struct lttng_event_field __event_fields___hello_world___my_first_tracepoint4_2[2];
     struct lttng_event_desc *__event_desc___hello_world4_[1];
+    struct lttng_event_desc *__event_desc___hello_world4_2[1];
     struct lttng_probe_desc __probe_desc___hello_world4_;
+    struct lttng_probe_desc __probe_desc___hello_world4_2;
     struct lttng_event_desc __event_desc___hello_world_my_first_tracepoint4_;
+    struct lttng_event_desc __event_desc___hello_world_my_first_tracepoint4_2;
     char * __tp_event_signature___hello_world___my_first_tracepoint4_;
+    char * __tp_event_signature___hello_world___my_first_tracepoint4_2;
     
     char * __tp_strtab_hello_world___my_first_tracepoint4_;
+    char * __tp_strtab_hello_world___my_first_tracepoint4_2;
     struct lttng_ust_tracepoint __tracepoint_hello_world___my_first_tracepoint4_;
+    struct lttng_ust_tracepoint __tracepoint_hello_world___my_first_tracepoint4_2;
     
     struct lttng_ust_tracepoint * __tracepoint_ptr_hello_world___my_first_tracepoint4_;
+    struct lttng_ust_tracepoint * __tracepoint_ptr_hello_world___my_first_tracepoint4_2;
     struct lttng_ust_tracepoint * __start___tracepoints_ptrs4_[1];
+    int __tracepoint_provider_hello_world4_;
+    int __tracepoint_provider_hello_world4_2;
     
     std::string ns;
     std::string name;
     std::string fullname;
+    std::string fullname2;
     
     LinuxTrace (std::string & ns, std::string & name) {
         fullname = (ns + ":" + name);
         __tp_strtab_hello_world___my_first_tracepoint4_ = (char *)fullname.c_str();
         this->ns = ns;
         this->name = name;
+        
+        // fullname2 = (ns + "2:" + name);
+        // __tp_strtab_hello_world___my_first_tracepoint4_2 = (char *)fullname2.c_str();
+        // this->ns = ns;
+        // this->name = name;
     }
     
     
-    void init() {
+    void init(int i) {
         __tracepoint_hello_world___my_first_tracepoint4_ = {
             __tp_strtab_hello_world___my_first_tracepoint4_,
             0,
             __null,
-            &__tracepoint_provider_hello_world,
+            &__tracepoint_provider_hello_world4_,
             "int, my_integer_arg, char*, my_string_arg",
             {},
         };
+        // __tracepoint_hello_world___my_first_tracepoint4_2 = {
+        // __tp_strtab_hello_world___my_first_tracepoint4_2,
+        // 0,
+        // __null,
+        // &__tracepoint_provider_hello_world4_2,
+        // "int, my_integer_arg, char*, my_string_arg",
+        // {},
+        // };
         
         __tracepoint_ptr_hello_world___my_first_tracepoint4_ = &__tracepoint_hello_world___my_first_tracepoint4_;
-        
-        if (__tracepoint_ptrs_registered++)
-    		return;
+        //__tracepoint_ptr_hello_world___my_first_tracepoint4_2 = &__tracepoint_hello_world___my_first_tracepoint4_2;
+        //if (__tracepoint_ptrs_registered++) {
+        //    std::cout << "Start reg" << std::endl;
+    	//	return;
+        //}
+        if (__tracepoint_ptrs_registered == 0) {
+            __tracepoint_ptrs_registered++;
+            //std::cout << "init" << std::endl;
     	if (!tracepoint_dlopen.liblttngust_handle)
     		tracepoint_dlopen.liblttngust_handle =
     			dlopen("liblttng-ust-tracepoint.so.0", RTLD_NOW | RTLD_GLOBAL);
@@ -77,12 +108,18 @@ class LinuxTrace {
     				dlsym(tracepoint_dlopen.liblttngust_handle,
     					"tracepoint_unregister_lib"));
     	__tracepoint__init_urcu_sym();
-        
+        }
+        int ret;
         
         __start___tracepoints_ptrs4_[0] = __tracepoint_ptr_hello_world___my_first_tracepoint4_;
+        //__start___tracepoints_ptrs4_[1] = __tracepoint_ptr_hello_world___my_first_tracepoint4_2;
     	if (tracepoint_dlopen.tracepoint_register_lib) {
-    		tracepoint_dlopen.tracepoint_register_lib(__start___tracepoints_ptrs4_, 1);
+            //std::cout << "Reg" << std::endl;
+    		ret = tracepoint_dlopen.tracepoint_register_lib(__start___tracepoints_ptrs4_, 1);
+            
+            std::cout << "Reg: " << ret << std::endl;
     	}
+        
         
         if(typeid(A) == typeid(int)) {
             lttng_event_field first = {
@@ -158,10 +195,45 @@ class LinuxTrace {
             __event_fields___hello_world___my_first_tracepoint4_[1] = second;
         }
         
+        // lttng_event_field first = {
+        //         .name = "my_integer_field", .type =
+        //         {
+        //             .atype = atype_integer, .u =
+        //             {
+        //                 .basic =
+        //                 {
+        //                     .integer =
+        //                     {
+        //                         .size = sizeof(int) * 8, .alignment = 1 * 8, .signedness = ((int) -1 < (int) 0), .reverse_byte_order = 1234 != 1234, .base = 10, .encoding = lttng_encode_none,
+        //                     }
+        //                 }
+        //             },
+        //         }, .nowrite = 0,
+        //     };
+        //     __event_fields___hello_world___my_first_tracepoint4_2[0] = first;
+        //     lttng_event_field second = {
+        //         .name = "my_string_field", .type =
+        //         {
+        //             .atype = atype_string, .u =
+        //             {
+        //                 .basic =
+        //                 {
+        //                     .string =
+        //                     {
+        //                         .encoding = lttng_encode_UTF8
+        //                     }
+        //                 }
+        //             },
+        //         }, .nowrite = 0,
+        //     };
+        //     __event_fields___hello_world___my_first_tracepoint4_2[1] = second;
+        
         
         
         __tp_event_signature___hello_world___my_first_tracepoint4_ = "int, my_integer_arg, char*, my_string_arg";
+        // __tp_event_signature___hello_world___my_first_tracepoint4_2 = "int, my_integer_arg, char*, my_string_arg";
         
+
         __event_desc___hello_world_my_first_tracepoint4_ = {
             .name = (char *)fullname.c_str(),
             .probe_callback = (void (*)(void)) &__event_probe__hello_world___my_first_tracepoint4_,
@@ -178,6 +250,28 @@ class LinuxTrace {
                 }
             },
         };
+        
+        // __event_desc___hello_world_my_first_tracepoint4_2 = {
+        //     .name = (char *)fullname2.c_str(),
+        //     .probe_callback = (void (*)(void)) &__event_probe__hello_world___my_first_tracepoint4_,
+        //     .ctx = __null,
+        //     .fields = __event_fields___hello_world___my_first_tracepoint4_2,
+        //     .nr_fields = (sizeof(__event_fields___hello_world___my_first_tracepoint4_2) / sizeof((__event_fields___hello_world___my_first_tracepoint4_2)[0])),
+        //     .loglevel = &__ref_loglevel___hello_world___my_first_tracepoint2,
+        //     .signature = __tp_event_signature___hello_world___my_first_tracepoint4_2,
+        //     .u =
+        //     {
+        //         .ext =
+        //         {
+        //             .model_emf_uri = &__ref_model_emf_uri___hello_world___my_first_tracepoint2
+        //         }
+        //     },
+        // };
+        std::cout << "init done " << std::endl;
+    }
+    
+    void init2 () {
+        
     }
     
     void dtor () {
@@ -455,6 +549,7 @@ class LinuxTrace {
         __tp_probe = (reinterpret_cast<__typeof__(__tracepoint_hello_world___my_first_tracepoint4_.probes)>
             (tracepoint_dlopen.rcu_dereference_sym_bp(
                 (reinterpret_cast<void *>(__tracepoint_hello_world___my_first_tracepoint4_.probes)))));
+        std::cout << __tp_probe << std::endl;
         if (__builtin_expect(!!(!__tp_probe), 0)) goto end;
         do
         {
@@ -471,25 +566,70 @@ class TraceProvider {
     public:
     std::map<std::string, LinuxTrace<int, char*>> traces;
     struct lttng_event_desc *__event_desc___hello_world4_[1];
+    struct lttng_event_desc *__event_desc___hello_world4_2[1];
+    struct lttng_event_desc *__event_desc___hello_world4_a[20];
     unsigned int eventsCount;
+    unsigned int eventsCount2;
+    unsigned int eventsCounta;
     struct lttng_probe_desc __probe_desc___hello_world4_;
+    struct lttng_probe_desc __probe_desc___hello_world4_2;
+    struct lttng_probe_desc __probe_desc___hello_world4_a;
     
     TraceProvider () {
         eventsCount = 0;
+        eventsCount2 = 0;
+        eventsCounta = 0;
     }
     
     void add (std::string & ns, std::string & name) {
         LinuxTrace<int, char*> linuxTrace (ns, name);
         std::string fullname = ns + ":" + name;
+        //std::string fullname2 = ns + "2:" + name;
         traces.insert(std::pair<std::string, LinuxTrace<int, char*>>(fullname, linuxTrace));
-        traces.find(fullname)->second.init();
+        traces.find(fullname)->second.init(0);
+        //TODO
+        std::cout << "add " << std::endl;
+        __event_desc___hello_world4_[eventsCount] =
+          &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_;
+        eventsCount++;
+        
+        // __event_desc___hello_world4_2[eventsCount2] =
+        //   &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_2;
+          
+        // eventsCount2++;
+        // std::cout << "add done " << &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_2<< std::endl;
+    }
+    
+    void add2 (std::string & ns, std::string & name) {
+        LinuxTrace<int, char*> linuxTrace (ns, name);
+        std::string fullname = ns + ":" + name;
+        std::cout << fullname << std::endl;
+        traces.insert(std::pair<std::string, LinuxTrace<int, char*>>(fullname, linuxTrace));
+        traces.find(fullname)->second.init(1);
         //TODO
         
-        __event_desc___hello_world4_[eventsCount] = &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_;
-        eventsCount++;
+        __event_desc___hello_world4_2[eventsCount2] = &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_;
+        eventsCount2++;
+    }
+    
+    void addAll (std::string & ns, std::string & name) {
+        for (int i = 0; i < 20; i++) {
+            //std::cout << i << std::endl;
+            std::stringstream sstm;
+            sstm << name << i;
+            std::string newname = sstm.str();
+            LinuxTrace<int, char*> linuxTrace (ns, newname);
+            std::string fullname = ns + ":" + newname;
+            traces.insert(std::pair<std::string, LinuxTrace<int, char*>>(fullname, linuxTrace));
+            traces.find(fullname)->second.init(1);
+            __event_desc___hello_world4_a[eventsCounta] = &traces.find(fullname)->second.__event_desc___hello_world_my_first_tracepoint4_;
+            eventsCounta++;
+        }
+        
     }
     
     void registerEvents () {
+        std::cout << "reg " << std::endl;
         __probe_desc___hello_world4_ = {
          .provider = "hello_world",
          .event_desc = (const lttng_event_desc**)__event_desc___hello_world4_,
@@ -507,10 +647,80 @@ class TraceProvider {
     	if (ret) {
     	  printf("bad %d\n", ret);
     	}
+        
+        //std::cout << "reg " << eventsCount2 << std::endl;
+        
+        // __probe_desc___hello_world4_2 = {
+        //  .provider = "hello_world2",
+        //  .event_desc = (const lttng_event_desc**)__event_desc___hello_world4_2,
+        //  .nr_events = eventsCount2,
+        //  .head = { __null, __null },
+        //  .lazy_init_head = { __null, __null },
+        //  .lazy = 0,
+        //  .major = 1,
+        //  .minor = 0,
+        // };
+        
+        // std::cout << "reg 2" << std::endl;
+        
+        // ret = lttng_probe_register(&__probe_desc___hello_world4_2);
+    	// if (ret) {
+    	//   printf("bad %d\n", ret);
+    	// }
+        std::cout << "reg done" << std::endl;
+    }
+    
+    void registerEvents2 () {
+        __probe_desc___hello_world4_2 = {
+         .provider = "hello_world",
+         .event_desc = (const lttng_event_desc**)__event_desc___hello_world4_2,
+         .nr_events = eventsCount2,
+         .head = { __null, __null },
+         .lazy_init_head = { __null, __null },
+         .lazy = 0,
+         .major = 1,
+         .minor = 0,
+        };
+        
+        int ret;
+        __tracepoint_provider_check_hello_world();
+        ret = lttng_probe_register(&__probe_desc___hello_world4_2);
+        //std::cout << ret << std::endl;
+    	if (ret) {
+    	  printf("bad %d\n", ret);
+    	}
+    }
+    
+    void registerEventsAll () {
+        __probe_desc___hello_world4_a = {
+         .provider = "hello_world",
+         .event_desc = (const lttng_event_desc**)__event_desc___hello_world4_a,
+         .nr_events = eventsCounta,
+         .head = { __null, __null },
+         .lazy_init_head = { __null, __null },
+         .lazy = 0,
+         .major = 1,
+         .minor = 0,
+        };
+        
+        int ret;
+        __tracepoint_provider_check_hello_world();
+        ret = lttng_probe_register(&__probe_desc___hello_world4_a);
+    	if (ret) {
+    	  printf("bad %d\n", ret);
+    	}
+        //std::cout << eventsCounta << std::endl;
     }
     
     void trace (std::string & ns, std::string & name) {
         std::string fullname = ns + ":" + name;
+        std::cout << fullname << std::endl;
+        traces.find(fullname)->second.__tracepoint_cb_hello_world___my_first_tracepoint4_(123, "test000");
+    }
+    
+    void trace2 (std::string & ns, std::string & name) {
+        std::string fullname = ns + ":" + name;
+        std::cout << fullname << std::endl;
         traces.find(fullname)->second.__tracepoint_cb_hello_world___my_first_tracepoint4_(123, "test000");
     }
     
@@ -537,13 +747,40 @@ class TraceHolder {
             providers.insert(std::pair<std::string, TraceProvider>(ns, tp));
         }
         
-        providers[ns].add(ns, name);
+        //std::string ns2 = "hello_world2";
+        //TraceProvider tp;
+        //providers.insert(std::pair<std::string, TraceProvider>(ns2, tp));
         
-        providers[ns].registerEvents();
+        //providers[ns].add(ns, name);
+        //providers[ns].registerEvents();
+        
+        providers[ns].add2(ns, name);
+        providers[ns].registerEvents2();
+        
+        //std::string name2 = "my_second_tracepoint";
+        //providers[ns].add2(ns, name2);
+        //providers[ns].registerEvents2();
+        
+        //providers[ns].addAll(ns, name);
+        //providers[ns].registerEventsAll();
     }
     
     void trace(std::string & ns, std::string & name) {
         providers.find(ns)->second.trace(ns, name);
+    }
+    
+    void trace2(std::string & ns, std::string & name) {
+        providers.find(ns)->second.trace2(ns, name);
+    }
+    
+    void traceAll(std::string & ns, std::string & name) {
+        for (int i = 0; i < 20; i++) {
+            std::stringstream sstm;
+            sstm << name << i;
+            std::string newname = sstm.str();
+            providers.find(ns)->second.trace2(ns, newname);
+        }
+        
     }
     
     void dtor () {
@@ -556,8 +793,8 @@ class TraceHolder {
         if (tracepoint_dlopen.liblttngust_handle && !__tracepoint_registered) {
             ret = dlclose(tracepoint_dlopen.liblttngust_handle);
             if (ret) {
-                    fprintf(stderr, "Error (%d) in dlclose\n", ret);
-                    abort();
+                fprintf(stderr, "Error (%d) in dlclose\n", ret);
+                abort();
             }
             memset(&tracepoint_dlopen, 0, sizeof(tracepoint_dlopen));
         }
@@ -580,7 +817,12 @@ int main(int argc, char* argv[]) {
     
 //do { do { __asm__ __volatile__ ("990: nop" "\n" ".pushsection .note.stapsdt" "," "\"?\"" "," "\"note\"" "\n" ".balign 4" "\n" ".4byte 992f-991f" "," "994f-993f" "," "3" "\n" "991: .asciz \"stapsdt\"" "\n" "992: .balign 4" "\n" "993: .8byte 990b" "\n" ".8byte _.stapsdt.base" "\n" ".8byte 0" "\n" ".asciz \"hello_world\"" "\n" ".asciz \"my_first_tracepoint\"" "\n" ".asciz \"%n[_SDT_S1]@%[_SDT_A1] %n[_SDT_S2]@%[_SDT_A2]\"" "\n" "994: .balign 4" "\n" ".popsection" "\n" :: [_SDT_S1] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type (1) + 3) & -4) == 4, (1), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type (1) == 14 || __builtin_classify_type (1) == 5) ? sizeof (void *) : sizeof (1))), [_SDT_A1] "nor" ((1)), [_SDT_S2] "n" (((!__extension__ (__builtin_constant_p ((((unsigned long long) (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) __sdt_unsp) & ((unsigned long long)1 << (sizeof (unsigned long long) * 8 - 1))) == 0) || (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) -1 > (__typeof (__builtin_choose_expr (((__builtin_classify_type ("test") + 3) & -4) == 4, ("test"), 0U))) 0)) ? 1 : -1) * (int) ((__builtin_classify_type ("test") == 14 || __builtin_classify_type ("test") == 5) ? sizeof (void *) : sizeof ("test"))), [_SDT_A2] "nor" (("test"))); __asm__ __volatile__ (".ifndef _.stapsdt.base" "\n" ".pushsection .stapsdt.base" "," "\"aG\"" "," "\"progbits\"" "," ".stapsdt.base" "," "comdat" "\n" ".weak _.stapsdt.base" "\n" ".hidden _.stapsdt.base" "\n" "_.stapsdt.base: .space 1" "\n" ".size _.stapsdt.base" "," "1" "\n" ".popsection" "\n" ".endif" "\n"); } while (0); if (__builtin_expect(!!(__tracepoint_hello_world___my_first_tracepoint2.state), 0)) __tracepoint_cb_hello_world___my_first_tracepoint2(1, "test"); } while (0);
 	
+    getchar();
+    //th.trace(ns, name);
+    //std::string name2 = "my_second_tracepoint";
+    //th.trace2(ns, name2);
     th.trace(ns, name);
+    
     th.dtor();
 }
 
